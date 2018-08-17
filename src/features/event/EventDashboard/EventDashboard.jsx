@@ -11,8 +11,8 @@ class EventDashboard extends Component {
           <EventList />
         </Grid.Column>
         <Grid.Column width={6}>
-        <Button positive content='Create Event'/>
-        <EventForm/>
+          <Button positive content="Create Event" />
+          <EventForm />
         </Grid.Column>
       </Grid>
     );
