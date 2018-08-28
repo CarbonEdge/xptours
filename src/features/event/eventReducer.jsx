@@ -1,5 +1,5 @@
 import { createReducer } from "../../app/common/util/reducerUtil";
-import { CREATE_EVENT, UPDATE_EVENT, DELETE_EVENT } from "./eventConstants";
+import { CREATE_EVENT, DELETE_EVENT, UPDATE_EVENT } from "./eventConstants";
 
 const initialState = [
   {
@@ -57,8 +57,10 @@ export const createEvent = (state, payload) => {
 };
 
 export const updateEvent = (state, payload) => {
-  return [...state.filter(event => event.id !== payload.event.id),
-    Object.assign({}, payload.event)];
+  return [
+    ...state.filter(event => event.id !== payload.event.id),
+    Object.assign({}, payload.event)
+  ];
 };
 
 export const deleteEvent = (state, payload) => {
