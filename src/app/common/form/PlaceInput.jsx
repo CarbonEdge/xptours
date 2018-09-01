@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Label } from "semantic-ui-react";
+import { Form } from "semantic-ui-react";
 import Script from "react-load-script";
 import PlacesAutocomplete from "react-places-autocomplete";
 
