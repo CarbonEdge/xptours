@@ -12,7 +12,7 @@ const rrfConfig = {
   userFirestoreForProfile: true
 }
 export const configureStore = preloadedState => {
-  const middlewares = [thunk.withExtraArguments({getFirebase, getFirestore})];
+  const middlewares = [thunk.withExtraArgument({getFirebase, getFirestore})];
   const middlewareEnhance = applyMiddleware(...middlewares);
 
   const storeEnhancers = [middlewareEnhance];
