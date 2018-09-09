@@ -20,19 +20,20 @@ import firebase from "../config/firebase";
 const rrfConfig = {
   userProfile: 'users',
   attachAuthIsReady: true,
-  userFirestoreForProfile: true,
+  useFirestoreForProfile: true,
   updateProfileOnLogin: false
 }
 export const configureStore = preloadedState => {
-  const middlewares = [thunk.withExtraArgument({
-    getFirebase,
-    getFirestore
-  })];
-  const middlewareEnhance = applyMiddleware(...middlewares);
+  const middlewares = [thunk.withExtraArgument({ getFirebase, getFirestore })];
+  const middlewareEnhancer = applyMiddleware(...middlewares);
 
-  const storeEnhancers = [middlewareEnhance];
+  const storeEnhancers = [middlewareEnhancer];
 
-  const composedEnhancer = composeWithDevTools(...storeEnhancers, reactReduxFirebase(firebase, rrfConfig), reduxFirestore(firebase));
+  const composedEnhancer = composeWithDevTools(
+    ...storeEnhancers,
+    reactReduxFirebase(firebase, rrfConfig),
+    reduxFirestore(firebase)
+  );
 
   const store = createStore(rootReducer, preloadedState, composedEnhancer);
 

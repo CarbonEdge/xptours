@@ -6,14 +6,16 @@ var firebaseConfig = {
   authDomain: "xptours123.firebaseapp.com",
   //databaseURL: "https://xptours123.firebaseio.com",
   projectId: "xptours123",
-  storageBucket: "xptours123.appspot.com",
-  messagingSenderId: "824771565381"
+  // storageBucket: "xptours123.appspot.com",
+  // messagingSenderId: "824771565381"
   };
   
   firebase.initializeApp(firebaseConfig);
   const firestore = firebase.firestore();
+  
   // const settings = {
-  //   timestampsInSnapshots: true
+  //   timestampsInSnapshots: true,
+  //   log: true
   // }
   // firestore.settings(settings)
   export default firebase;
