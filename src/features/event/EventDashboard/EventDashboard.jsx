@@ -24,6 +24,7 @@ class EventDashboard extends Component {
   render() {
     const { events, loading } = this.props;
     if (loading) return <LoadingComponent inverted={true} />;
+
     return (
       <Grid>
         <Grid.Column width={10}>
@@ -37,13 +38,6 @@ class EventDashboard extends Component {
   }
 }
 
-export default connect(
-  mapState,
-  actions
-)(
-  firestoreConnect([
-    {
-      collection: 'events'
-    }
-  ])(EventDashboard)
+export default connect(mapState, actions)(
+  firestoreConnect([{ collection: 'events' }])(EventDashboard)
 );

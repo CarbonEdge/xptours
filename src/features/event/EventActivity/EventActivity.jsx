@@ -1,15 +1,15 @@
-import React from 'react';
-import { Header, Segment } from 'semantic-ui-react';
+import React from 'react'
+import { Header, Segment } from 'semantic-ui-react'
 
 const EventActivity = () => {
   return (
     <div>
-      <Header attached="top" content="Recent Activity" />
+      <Header attached='top' content='Recent Activity'/>
       <Segment attached>
-        <p>Recent Activity</p>
+        <p>Recent activity</p>
       </Segment>
     </div>
-  );
-};
+  )
+}
 
-export default EventActivity;
+export default EventActivity

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Segment, Image, Item, Header, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
-import format from 'date-fns/format';
+import format from 'date-fns/format'
 
 const eventImageStyle = {
     filter: 'brightness(30%)'

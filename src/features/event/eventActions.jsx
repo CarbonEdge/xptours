@@ -1,20 +1,20 @@
+import { toastr } from 'react-redux-toastr'
 import {
   CREATE_EVENT,
-  UPDATE_EVENT,
   DELETE_EVENT,
-  FETCH_EVENT
+  UPDATE_EVENT,
+  FETCH_EVENTS
 } from './eventConstants';
 import {
-  asyncActionError,
   asyncActionStart,
-  asyncActionFinish
+  asyncActionFinish,
+  asyncActionError
 } from '../async/asyncActions';
 import { fetchSampleData } from '../../app/data/mockApi';
-import { toastr } from 'react-redux-toastr';
 
-export const fetchEvent = events => {
+export const fetchEvents = events => {
   return {
-    type: FETCH_EVENT,
+    type: FETCH_EVENTS,
     payload: events
   };
 };
@@ -28,9 +28,9 @@ export const createEvent = event => {
           event
         }
       });
-      toastr.success('Success!', 'Event created');
+      toastr.success('Success', 'Event has been created')
     } catch (error) {
-      toastr.error('oops', 'something went wrong');
+      toastr.error('Oops', 'Something went wrong')
     }
   };
 };
@@ -44,9 +44,9 @@ export const updateEvent = event => {
           event
         }
       });
-      toastr.success('Success!', 'Event updated');
+      toastr.success('Success', 'Event has been updated')
     } catch (error) {
-      toastr.error('oops', 'something went wrong');
+      toastr.error('Oops', 'Something went wrong')
     }
   };
 };
@@ -65,7 +65,7 @@ export const loadEvents = () => {
     try {
       dispatch(asyncActionStart());
       let events = await fetchSampleData();
-      dispatch(fetchEvent(events));
+      dispatch(fetchEvents(events));
       dispatch(asyncActionFinish());
     } catch (error) {
       console.log(error);
