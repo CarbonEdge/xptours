@@ -16,7 +16,7 @@ import { toastr } from 'react-redux-toastr';
 import Dropzone from 'react-dropzone';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
-import { uploadProfileImage } from '../userActions';
+import { uploadProfileImage, deletePhoto } from '../userActions';
 
 const query = ({ auth }) => {
   return [
@@ -30,13 +30,15 @@ const query = ({ auth }) => {
 };
 
 const actions = {
-  uploadProfileImage
+  uploadProfileImage,
+  deletePhoto
 };
 
 const mapState = state => ({
   auth: state.firebase.auth,
   profile: state.firebase.profile,
-  photos: state.firestore.ordered.photos
+  photos: state.firestore.ordered.photos,
+  loading: state.async.loading
 });
 
 class PhotosPage extends Component {
@@ -47,6 +49,13 @@ class PhotosPage extends Component {
     image: {}
   };
 
+  cancelCrop = () => {
+    this.setState({
+      files: [],
+      image: {}
+    });
+  };
+
   uploadImage = async () => {
     try {
       await this.props.uploadProfileImage(
@@ -54,19 +63,19 @@ class PhotosPage extends Component {
         this.state.fileName
       );
       this.cancelCrop();
-      toastr.success('Success!', 'Photo has been uploaded');
+      toastr.success('Success', 'Photo has been uploaded');
     } catch (error) {
-      toastr.error('oops! ', error.message);
+      toastr.error('Oops', error.message);
     }
   };
 
-  handlePhotoDelete = photo => () => {
+  handlePhotoDelete = (photo) => async () => {
     try {
       this.props.deletePhoto(photo);
     } catch (error) {
-      toastr.error('oops', error.message);
+      toastr.error('Oops 2k', error.message)
     }
-  };
+  }
 
   cancelCrop = () => {
     this.setState({
