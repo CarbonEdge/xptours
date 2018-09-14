@@ -16,7 +16,7 @@ import { toastr } from 'react-redux-toastr';
 import Dropzone from 'react-dropzone';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
-import { uploadProfileImage, deletePhoto } from '../userActions';
+import { uploadProfileImage, deletePhoto, setMainPhoto } from '../userActions';
 
 const query = ({ auth }) => {
   return [
@@ -31,7 +31,8 @@ const query = ({ auth }) => {
 
 const actions = {
   uploadProfileImage,
-  deletePhoto
+  deletePhoto,
+  setMainPhoto
 };
 
 const mapState = state => ({
@@ -73,21 +74,23 @@ class PhotosPage extends Component {
     try {
       this.props.deletePhoto(photo);
     } catch (error) {
-      toastr.error('Oops 2k', error.message)
+      toastr.error('Oops', error.message)
     }
   }
 
-  cancelCrop = () => {
-    this.setState({
-      files: [],
-      image: {}
-    });
-  };
+  handleSetMainPhoto = (photo) => async () => {
+    try {
+      this.props.setMainPhoto(photo)
+    } catch (error) {
+      toastr.error('Oops', error.message)
+    }
+  }
 
   cropImage = () => {
     if (typeof this.refs.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
+
     this.refs.cropper.getCroppedCanvas().toBlob(blob => {
       let imageUrl = URL.createObjectURL(blob);
       this.setState({
@@ -96,19 +99,21 @@ class PhotosPage extends Component {
       });
     }, 'image/jpeg');
   };
+
   onDrop = files => {
     this.setState({
       files,
       fileName: files[0].name
     });
   };
+
   render() {
-    const { photos, profile } = this.props;
+    const { photos, profile, loading } = this.props;
     let filteredPhotos;
     if (photos) {
       filteredPhotos = photos.filter(photo => {
-        return photo.url !== profile.photoUrl;
-      });
+        return photo.url !== profile.photoURL
+      })
     }
     return (
       <Segment>
@@ -120,7 +125,7 @@ class PhotosPage extends Component {
             <Dropzone onDrop={this.onDrop} multiple={false}>
               <div style={{ paddingTop: '30px', textAlign: 'center' }}>
                 <Icon name="upload" size="huge" />
-                <Header content="Drop image here or click to add" />
+                <Header content="Drop image here or click to upload" />
               </div>
             </Dropzone>
           </Grid.Column>
@@ -133,6 +138,7 @@ class PhotosPage extends Component {
                 ref="cropper"
                 src={this.state.files[0].preview}
                 aspectRatio={1}
+                viewMode={0}
                 dragMode="move"
                 guides={false}
                 scalable={true}
@@ -153,12 +159,14 @@ class PhotosPage extends Component {
                 />
                 <Button.Group>
                   <Button
+                    loading={loading}
                     onClick={this.uploadImage}
                     style={{ width: '100px' }}
                     positive
                     icon="check"
                   />
                   <Button
+                    disabled={loading}
                     onClick={this.cancelCrop}
                     style={{ width: '100px' }}
                     icon="close"
@@ -174,7 +182,7 @@ class PhotosPage extends Component {
 
         <Card.Group itemsPerRow={5}>
           <Card>
-            <Image src={profile.photoUrl} />
+            <Image src={profile.photoURL || '/assets/user.png'} />
             <Button positive>Main Photo</Button>
           </Card>
           {photos &&
@@ -182,7 +190,7 @@ class PhotosPage extends Component {
               <Card key={photo.id}>
                 <Image src={photo.url} />
                 <div className="ui two buttons">
-                  <Button basic color="green">
+                  <Button onClick={this.handleSetMainPhoto(photo)} basic color="green">
                     Main
                   </Button>
                   <Button onClick={this.handlePhotoDelete(photo)} basic icon="trash" color="red" />
@@ -196,9 +204,6 @@ class PhotosPage extends Component {
 }
 
 export default compose(
-  connect(
-    mapState,
-    actions
-  ),
+  connect(mapState, actions),
   firestoreConnect(auth => query(auth))
 )(PhotosPage);
