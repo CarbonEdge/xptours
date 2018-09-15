@@ -17,12 +17,14 @@ import rootReducer from "../reducer/rootReducer";
 import thunk from 'redux-thunk'
 import firebase from "../config/firebase";
 
+
 const rrfConfig = {
   userProfile: 'users',
   attachAuthIsReady: true,
   useFirestoreForProfile: true,
   updateProfileOnLogin: false
-}
+};
+
 export const configureStore = preloadedState => {
   const middlewares = [thunk.withExtraArgument({ getFirebase, getFirestore })];
   const middlewareEnhancer = applyMiddleware(...middlewares);
@@ -37,13 +39,14 @@ export const configureStore = preloadedState => {
 
   const store = createStore(rootReducer, preloadedState, composedEnhancer);
 
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV !== 'production') {
     if (module.hot) {
-      module.hot.accept("../reducer/rootReducer", () => {
-        const newRootReducer = require("../reducer/rootReducer").default;
+      module.hot.accept('../reducer/rootReducer.js', () => {
+        const newRootReducer = require('../reducer/rootReducer').default;
         store.replaceReducer(newRootReducer);
       });
     }
   }
+
   return store;
 };
