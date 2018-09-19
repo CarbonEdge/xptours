@@ -5,9 +5,9 @@ import differenceInYears from 'date-fns/difference_in_years'
 const UserDetailedHeader = ({profile}) => {
   let age;
   if (profile.dateOfBirth) {
-    age = differenceInYears(Date.now(), profile.dateOfBirth.toDate())
+    age = differenceInYears(Date.now(), profile.dateOfBirth.toDate);
   } else {
-    age = 'unknown age'
+    age = 'unknown age';
   }
   return (
     <Grid.Column width={16}>
