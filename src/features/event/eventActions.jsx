@@ -9,6 +9,7 @@ import { fetchSampleData } from '../../app/data/mockApi';
 import { createNewEvent } from '../../app/common/util/helpers';
 import moment from 'moment';
 import firebase from '../../app/config/firebase';
+import { getFirebase } from 'react-redux-firebase';
 
 export const createEvent = event => {
   return async (dispatch, getState, { getFirestore }) => {
@@ -116,5 +117,29 @@ export const getEventsForDashboard = lastEvent => async (
   } catch (error) {
     console.log(error);
     dispatch(asyncActionError());
+  }
+};
+
+export const addEventComment = (eventId, values) => async (
+  dispatch,
+  getState,
+  { getFirestore }
+) => {
+  const firebase = getFirebase();
+  const profile = getState().firebase.profile;
+  const user = firebase.auth().currentUser;
+  let newComment ={
+    displayName: profile.displayName,
+    photoURL: profile.photoURL || '/assets/user.png',
+    uid: user.uid,
+    text: values.comment,
+    date: Date.now()
+
+  }
+  try {
+    await firebase.push(`event_chat/${eventId}`, newComment);
+  } catch (error) {
+    console.log(error);
+    toastr.error('Oops', 'Problem adding comment');
   }
 };
